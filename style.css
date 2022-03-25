@@ -1,0 +1,116 @@
+@import url("https://fonts.googleapis.com/css2?family=Creepster&family=Dancing+Script&family=Festive&family=Indie+Flower&family=Moo+Lah+Lah&family=PT+Sans+Narrow&family=Permanent+Marker&family=Poppins:wght@300&family=Roboto:wght@100&family=Rock+Salt&family=Lato&display=swap");
+
+* {
+  margin: 0;
+  font-family: "Lato", sans-serif;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  row-gap: 60px;
+  background-color: aquamarine;
+  height: 500px;
+  width: 600px;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px black;
+
+  margin: 0 auto;
+  margin-top: 50px;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+  width: 200px;
+  height: 200px;
+  font-family: "Lato";
+  font-size: 30px;
+  font-weight: bold;
+
+  /* margin-top: 50px; */
+}
+
+.box {
+  background-color: aquamarine;
+  border: rgba(0, 0, 0, 0.3) solid 2px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.box:nth-child(1) {
+  border-top: none;
+  border-left: none;
+}
+
+.box:nth-child(2) {
+  border-top: none;
+}
+
+.box:nth-child(3) {
+  border-top: none;
+  border-right: none;
+}
+
+.box:nth-child(4) {
+  border-left: none;
+}
+
+.box:nth-child(6) {
+  border-right: none;
+}
+
+.box:nth-child(7) {
+  border-bottom: none;
+  border-left: none;
+}
+
+.box:nth-child(8) {
+  border-bottom: none;
+}
+
+.box:nth-child(9) {
+  border-bottom: none;
+  border-right: none;
+}
+
+div.restart-btn button {
+  padding: 15px 30px;
+  border: none;
+  border-radius: 5px;
+  background-color: rgb(255, 165, 0, 0.9);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0px 0px 2px black;
+}
+
+div.restart-btn > button:hover {
+  background-color: orange;
+}
+
+.operator-btns {
+  background-color: white;
+  width: 100%;
+  height: 80px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 30px;
+}
+
+.operator-btns button {
+  padding: 5px 60px;
+  background-color: white;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  font-weight: bold;
+}
