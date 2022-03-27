@@ -40,13 +40,57 @@ const displayController = (() => {
       gamePlay.setMarker(e.target.dataset.index, currentPlayerChance());
       if (e.target.textContent !== "") return;
       e.target.textContent = currentPlayerChance();
+
       console.log(gamePlay.getMarker());
+      const winCheckerArray = gamePlay.getMarker();
+      if (gameController.checkWin("X", winCheckerArray) === true) {
+        console.log("XXXXXXXXXXX");
+        let xAccArray = gameController.getAllIndexes(winCheckerArray, "X");
+        console.log(xAccArray);
+      } else if (gameController.checkWin("O", winCheckerArray) === true) {
+        console.log("OOOOOOOOOOOOO");
+        let oAccArray = gameController.getAllIndexes(winCheckerArray, "O");
+        console.log(oAccArray);
+      }
+
       round++;
     });
   });
 })();
 
-const gameController = () => {};
+const gameController = (() => {
+  const winConditions = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+
+  //   let xValue = "X";
+  //   let oValue = "O";
+
+  function checkWin(value, array) {
+    return winConditions.some((cond) =>
+      cond.every((index) => array[index] == value)
+    );
+  }
+
+  function getAllIndexes(arr, val) {
+    let indexes = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (arr[i] == val) {
+        indexes.push(i);
+      }
+    }
+    return indexes;
+  }
+
+  return { checkWin, getAllIndexes };
+})();
 
 // console.log(gamePlay.boardArr);
 
