@@ -24,6 +24,7 @@ const gamePlay = (() => {
 
 const displayController = (() => {
   const allBoxes = Array.from(document.querySelectorAll(".box"));
+  const winnerEl = document.querySelector(".winner");
 
   const xPlayer = Player("X");
   const oPlayer = Player("O");
@@ -43,17 +44,34 @@ const displayController = (() => {
 
       console.log(gamePlay.getMarker());
       const winCheckerArray = gamePlay.getMarker();
+
       if (gameController.checkWin("X", winCheckerArray) === true) {
         console.log("XXXXXXXXXXX");
         let xAccArray = gameController.getAllIndexes(winCheckerArray, "X");
         console.log(xAccArray);
+
+        let xWinPos = gameController.getWinPos("X", winCheckerArray);
+        console.log(xWinPos);
+
+        gameController.lineThrough(xWinPos, allBoxes);
+        winnerEl.textContent = "❌ is a Winner 🎉";
       } else if (gameController.checkWin("O", winCheckerArray) === true) {
         console.log("OOOOOOOOOOOOO");
         let oAccArray = gameController.getAllIndexes(winCheckerArray, "O");
         console.log(oAccArray);
+
+        let oWinPos = gameController.getWinPos("O", winCheckerArray);
+        console.log(oWinPos);
+
+        gameController.lineThrough(oWinPos, allBoxes);
+        winnerEl.textContent = "⭕ is a Winner 🎉";
       }
 
       round++;
+      console.log(round);
+      if (round == 10 && winnerEl.textContent == "Winner of the Game is...") {
+        winnerEl.textContent = "❌⭕ It's a Draw ...";
+      }
     });
   });
 })();
@@ -73,6 +91,12 @@ const gameController = (() => {
   //   let xValue = "X";
   //   let oValue = "O";
 
+  function getWinPos(value, array) {
+    return winConditions.find((cond) =>
+      cond.every((index) => array[index] == value)
+    );
+  }
+
   function checkWin(value, array) {
     return winConditions.some((cond) =>
       cond.every((index) => array[index] == value)
@@ -89,8 +113,27 @@ const gameController = (() => {
     return indexes;
   }
 
-  return { checkWin, getAllIndexes };
+  function lineThrough(arr1, arr2) {
+    for (let i = 0; i < arr1.length; i++) {
+      arr2[arr1[i]].classList.add("line-through");
+    }
+  }
+
+  return { checkWin, getAllIndexes, lineThrough, getWinPos };
 })();
+
+const gameDraw = () => {
+  const allBoxes = Array.from(document.querySelectorAll(".box"));
+  const winnerEl = document.querySelector(".winner");
+
+  allBoxes.forEach((box) => {
+    box.addEventListener("click", function (e) {
+      if (box.textContent !== "") {
+        console.log("Its a Draw");
+      }
+    });
+  });
+};
 
 // console.log(gamePlay.boardArr);
 
