@@ -9,7 +9,11 @@ const Player = (sign) => {
 };
 
 const gamePlay = (() => {
-  const boardArr = Array(9).fill("");
+  let boardArr = Array(9).fill("");
+
+  function setBoardArr() {
+    boardArr = Array(9).fill("");
+  }
 
   const setMarker = (index, sign) => {
     boardArr[index] = sign;
@@ -19,17 +23,43 @@ const gamePlay = (() => {
     return boardArr;
   };
 
-  return { setMarker, getMarker };
+  return { setMarker, getMarker, setBoardArr };
 })();
 
 const displayController = (() => {
   const allBoxes = Array.from(document.querySelectorAll(".box"));
   const winnerEl = document.querySelector(".winner");
+  const restartGameButton = document.querySelector(".restart-game");
 
   const xPlayer = Player("X");
   const oPlayer = Player("O");
 
   let round = 1;
+  let gameWon = false;
+
+  function getAllBoxes() {
+    return allBoxes;
+  }
+
+  function setAllBoxes() {
+    allBoxes.forEach((item) => item.classList.remove("line-through"));
+  }
+
+  function getRound() {
+    return round;
+  }
+
+  function getGameWon() {
+    return gameWon;
+  }
+
+  function setRound(value) {
+    round = value;
+  }
+
+  function setGameWon() {
+    gameWon = false;
+  }
 
   const currentPlayerChance = () => {
     return round % 2 == 1 ? xPlayer.getSign() : oPlayer.getSign();
@@ -38,6 +68,7 @@ const displayController = (() => {
   allBoxes.forEach((box) => {
     box.addEventListener("click", function (e) {
       //   console.log(e.target.dataset.index);
+      if (gameWon) return;
       gamePlay.setMarker(e.target.dataset.index, currentPlayerChance());
       if (e.target.textContent !== "") return;
       e.target.textContent = currentPlayerChance();
@@ -47,33 +78,49 @@ const displayController = (() => {
 
       if (gameController.checkWin("X", winCheckerArray) === true) {
         console.log("XXXXXXXXXXX");
-        let xAccArray = gameController.getAllIndexes(winCheckerArray, "X");
+        const xAccArray = gameController.getAllIndexes(winCheckerArray, "X");
         console.log(xAccArray);
 
-        let xWinPos = gameController.getWinPos("X", winCheckerArray);
+        const xWinPos = gameController.getWinPos("X", winCheckerArray);
         console.log(xWinPos);
 
         gameController.lineThrough(xWinPos, allBoxes);
+
         winnerEl.textContent = "❌ is a Winner 🎉";
+        restartGameButton.className += " rainbow";
+        gameWon = true;
       } else if (gameController.checkWin("O", winCheckerArray) === true) {
         console.log("OOOOOOOOOOOOO");
-        let oAccArray = gameController.getAllIndexes(winCheckerArray, "O");
+        const oAccArray = gameController.getAllIndexes(winCheckerArray, "O");
         console.log(oAccArray);
 
-        let oWinPos = gameController.getWinPos("O", winCheckerArray);
+        const oWinPos = gameController.getWinPos("O", winCheckerArray);
         console.log(oWinPos);
 
         gameController.lineThrough(oWinPos, allBoxes);
+
         winnerEl.textContent = "⭕ is a Winner 🎉";
+        restartGameButton.className += " rainbow";
+        gameWon = true;
       }
 
       round++;
       console.log(round);
       if (round == 10 && winnerEl.textContent == "Winner of the Game is...") {
         winnerEl.textContent = "❌⭕ It's a Draw ...";
+        restartGameButton.className += " rainbow";
       }
     });
   });
+
+  return {
+    getRound,
+    getGameWon,
+    setRound,
+    setGameWon,
+    getAllBoxes,
+    setAllBoxes,
+  };
 })();
 
 const gameController = (() => {
@@ -87,9 +134,6 @@ const gameController = (() => {
     [0, 4, 8],
     [2, 4, 6],
   ];
-
-  //   let xValue = "X";
-  //   let oValue = "O";
 
   function getWinPos(value, array) {
     return winConditions.find((cond) =>
@@ -122,6 +166,30 @@ const gameController = (() => {
   return { checkWin, getAllIndexes, lineThrough, getWinPos };
 })();
 
+const gameReset = (() => {
+  const restartGameButton = document.querySelector(".restart-game");
+  const allBoxes = Array.from(document.querySelectorAll(".box"));
+  const winnerEl = document.querySelector(".winner");
+
+  restartGameButton.addEventListener("click", function (e) {
+    restartGameButton.classList.remove("rainbow");
+
+    displayController.setRound(1);
+    displayController.setGameWon();
+
+    gamePlay.setBoardArr();
+
+    displayController.setAllBoxes();
+
+    for (let i = 0; i < allBoxes.length; i++) {
+      allBoxes[i].textContent = "";
+    }
+
+    winnerEl.textContent = `Winner of the Game is...`;
+  });
+})();
+
+/*
 const gameDraw = () => {
   const allBoxes = Array.from(document.querySelectorAll(".box"));
   const winnerEl = document.querySelector(".winner");
@@ -134,6 +202,7 @@ const gameDraw = () => {
     });
   });
 };
+*/
 
 // console.log(gamePlay.boardArr);
 
