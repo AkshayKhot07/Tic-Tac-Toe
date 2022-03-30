@@ -26,6 +26,31 @@ const gamePlay = (() => {
   return { setMarker, getMarker, setBoardArr };
 })();
 
+const choosePlayerMove = (() => {
+  const allBoxes = Array.from(document.querySelectorAll(".box"));
+  const playerBtns = document.querySelector(".operator-btns");
+  const xPlayerMove = document.querySelector(".xPlayerMove");
+  const oPlayerMove = document.querySelector(".oPlayerMove");
+
+  function currentPlayerMove() {
+    playerBtns.addEventListener("click", function (e) {
+      for (let i = 0; i < allBoxes.length; i++) {
+        if (allBoxes[i].textContent == "X" || allBoxes[i].textContent == "O") {
+          return;
+        } else if (e.target.classList.contains("xPlayerMove")) {
+          xPlayerMove.setAttribute("id", "pink-border");
+          oPlayerMove.removeAttribute("id");
+        } else if (e.target.classList.contains("oPlayerMove")) {
+          oPlayerMove.setAttribute("id", "pink-border");
+          xPlayerMove.removeAttribute("id");
+        }
+      }
+    });
+  }
+
+  return { currentPlayerMove };
+})();
+
 const displayController = (() => {
   const allBoxes = Array.from(document.querySelectorAll(".box"));
   const winnerEl = document.querySelector(".winner");
@@ -61,8 +86,17 @@ const displayController = (() => {
     gameWon = false;
   }
 
+  const xPlayerMove = document.querySelector(".xPlayerMove");
+  const oPlayerMove = document.querySelector(".oPlayerMove");
+
+  choosePlayerMove.currentPlayerMove();
+
   const currentPlayerChance = () => {
-    return round % 2 == 1 ? xPlayer.getSign() : oPlayer.getSign();
+    if (xPlayerMove.id == "pink-border") {
+      return round % 2 == 1 ? xPlayer.getSign() : oPlayer.getSign();
+    } else if (oPlayerMove.id == "pink-border") {
+      return round % 2 == 1 ? oPlayer.getSign() : xPlayer.getSign();
+    }
   };
 
   allBoxes.forEach((box) => {
@@ -171,6 +205,9 @@ const gameReset = (() => {
   const allBoxes = Array.from(document.querySelectorAll(".box"));
   const winnerEl = document.querySelector(".winner");
 
+  const xPlayerMove = document.querySelector(".xPlayerMove");
+  const oPlayerMove = document.querySelector(".oPlayerMove");
+
   restartGameButton.addEventListener("click", function (e) {
     restartGameButton.classList.remove("rainbow");
 
@@ -186,8 +223,15 @@ const gameReset = (() => {
     }
 
     winnerEl.textContent = `Winner of the Game is...`;
+
+    xPlayerMove.setAttribute("id", "pink-border");
+    oPlayerMove.removeAttribute("id");
   });
 })();
+
+// const currentPlayerChance = () => {
+//   return round % 2 == 1 ? xPlayer.getSign() : oPlayer.getSign();
+// };
 
 /*
 const gameDraw = () => {
